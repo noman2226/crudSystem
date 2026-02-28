@@ -23,13 +23,22 @@ function getPDO()
             `id` int unsigned NOT NULL AUTO_INCREMENT,
             `first_name` varchar(100) NOT NULL,
             `last_name` varchar(100) NOT NULL,
+            `reg_no` varchar(50) NOT NULL,
             `email` varchar(150) NOT NULL,
             `dob` date DEFAULT NULL,
             `course` varchar(150) DEFAULT NULL,
             `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (`id`),
-            UNIQUE KEY `email_unique` (`email`)
+            UNIQUE KEY `email_unique` (`email`),
+            UNIQUE KEY `regno_unique` (`reg_no`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+        // older installations might lack reg_no column, attempt to add it
+        try {
+            $pdo->exec("ALTER TABLE `students` ADD COLUMN `reg_no` varchar(50) NOT NULL AFTER `last_name`");
+            $pdo->exec("ALTER TABLE `students` ADD UNIQUE KEY `regno_unique` (`reg_no`)");
+        } catch (PDOException $ignored) {
+            // ignore errors (column/index may already exist)
+        }
         return $pdo;
     } catch (PDOException $e) {
         // If database does not exist (SQLSTATE[HY000] [1049]) try to create it
@@ -45,13 +54,21 @@ function getPDO()
                     `id` int unsigned NOT NULL AUTO_INCREMENT,
                     `first_name` varchar(100) NOT NULL,
                     `last_name` varchar(100) NOT NULL,
+                    `reg_no` varchar(50) NOT NULL,
                     `email` varchar(150) NOT NULL,
                     `dob` date DEFAULT NULL,
                     `course` varchar(150) DEFAULT NULL,
                     `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
                     PRIMARY KEY (`id`),
-                    UNIQUE KEY `email_unique` (`email`)
+                    UNIQUE KEY `email_unique` (`email`),
+                    UNIQUE KEY `regno_unique` (`reg_no`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                // ensure column exists if older DB
+                try {
+                    $pdo->exec("ALTER TABLE `students` ADD COLUMN `reg_no` varchar(50) NOT NULL AFTER `last_name`");
+                    $pdo->exec("ALTER TABLE `students` ADD UNIQUE KEY `regno_unique` (`reg_no`)");
+                } catch (PDOException $ignore) {
+                }
                 return $pdo;
             } catch (PDOException $e2) {
                 http_response_code(500);

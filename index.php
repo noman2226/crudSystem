@@ -29,6 +29,15 @@ $students = $stmt->fetchAll();
 <section>
     <div class="card">
         <h2>All Students</h2>
+        <?php if (isset($_GET['status'])): ?>
+            <?php if ($_GET['status'] === 'deleted'): ?>
+                <script>alert('Student deleted successfully');</script>
+            <?php elseif ($_GET['status'] === 'updated'): ?>
+                <script>alert('Student updated successfully');</script>
+            <?php elseif ($_GET['status'] === 'created'): ?>
+                <script>alert('Student created successfully');</script>
+            <?php endif; ?>
+        <?php endif; ?>
         <?php if (count($students) === 0): ?>
             <p>No students found. <a href="create.php">Add one</a>.</p>
         <?php else: ?>
@@ -37,6 +46,7 @@ $students = $stmt->fetchAll();
                 <tr>
                     <th>#</th>
                     <th>Name</th>
+                    <th>Reg. No.</th>
                     <th>Email</th>
                     <th>Course</th>
                     <th>Actions</th>
@@ -47,6 +57,7 @@ $students = $stmt->fetchAll();
                     <tr>
                         <td><?php echo $s['id']; ?></td>
                         <td><?php echo htmlspecialchars($s['first_name'] . ' ' . $s['last_name']); ?></td>
+                        <td><?php echo htmlspecialchars($s['reg_no']); ?></td>
                         <td><?php echo htmlspecialchars($s['email']); ?></td>
                         <td><?php echo htmlspecialchars($s['course']); ?></td>
                         <td>

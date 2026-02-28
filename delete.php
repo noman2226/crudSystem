@@ -13,5 +13,6 @@ if ($id <= 0) {
 $pdo = getPDO();
 $stmt = $pdo->prepare('DELETE FROM students WHERE id = ?');
 $stmt->execute([$id]);
-header('Location: index.php');
+// redirect back with status flag for JS alert
+header('Location: index.php?status=deleted');
 exit;

@@ -20,17 +20,20 @@ $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $first = trim($_POST['first_name'] ?? '');
     $last = trim($_POST['last_name'] ?? '');
+    $reg = trim($_POST['reg_no'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $dob = trim($_POST['dob'] ?? null);
     $course = trim($_POST['course'] ?? '');
 
     if ($first === '' || $last === '') $errors[] = 'First and last name are required.';
+    if ($reg === '') $errors[] = 'Registration number is required.';
     if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'A valid email is required.';
 
     if (empty($errors)) {
-        $upd = $pdo->prepare('UPDATE students SET first_name=?, last_name=?, email=?, dob=?, course=? WHERE id=?');
-        $upd->execute([$first, $last, $email, $dob, $course, $id]);
-        header('Location: index.php');
+        $upd = $pdo->prepare('UPDATE students SET first_name=?, last_name=?, reg_no=?, email=?, dob=?, course=? WHERE id=?');
+        $upd->execute([$first, $last, $reg, $email, $dob, $course, $id]);
+        // redirect with update status
+        header('Location: index.php?status=updated');
         exit;
     }
 }
@@ -69,6 +72,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </label>
             <label>Last name
                 <input name="last_name" value="<?php echo htmlspecialchars($_POST['last_name'] ?? $student['last_name']); ?>">
+            </label>
+            <label>Registration No.
+                <input name="reg_no" value="<?php echo htmlspecialchars($_POST['reg_no'] ?? $student['reg_no']); ?>">
             </label>
             <label>Email
                 <input name="email" type="email" value="<?php echo htmlspecialchars($_POST['email'] ?? $student['email']); ?>">
