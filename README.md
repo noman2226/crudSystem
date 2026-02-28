@@ -19,4 +19,4 @@ A minimal PHP app demonstrating CRUD operations with a text file backend. No dat
 
 That’s it—simple and easy to modify.
 
-Video demo: https://drive.google.com/drive/folders/184_Fs0aVodq1nwQVt8e1iywH-YvxY7vm?usp=sharing
+Video demo: https://drive.google.com/file/d/14JOsGrujDmfY0jUloquMJiA6_ZNsqR2H/view?usp=drive_link
